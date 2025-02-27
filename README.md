@@ -16,3 +16,5 @@ De afstandsbediener heeft een aanknop, meerdere kanaal knoppen, volume knop.
 De afstandsbediener is in 3D gedraaid zodat de afstandsbediener naar de tv gekantend is.
 
 ## Link
+
+[Link naar opdracht](https://tymonl.github.io/CSS-eind-opdracht/index.html)
