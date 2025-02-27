@@ -1,0 +1,134 @@
+:root {
+    --color-power-on: rgba(241, 90, 34, 1);
+    --color-power-off: rgba(255, 148, 112, 1);
+
+    --screen-color: rgba(0, 0, 0, 1);
+
+    --chanel-active: rgba(0, 0, 0, 1);
+    --chanel-inactive: rgba(1, 1, 1, 1);
+}
+
+body {
+    margin: 0;
+}
+
+button {
+    cursor: pointer;
+}
+
+main {
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    perspective: 25em;
+    perspective-origin: 50% 50%;
+    transform-style: preserve-3d;
+}
+
+/* Screen */
+section:nth-of-type(1) {
+    background-color: var(--screen-color);
+    width: 66%;
+    height: 40vmin;
+    border: 0.75em solid #444;
+    border-radius: 0.75em;
+    align-self: center;
+    justify-self: center;
+}
+
+/* remote */
+section:nth-of-type(2) {
+    background-color: #444;
+    width: 10em;
+    min-width: 20%;
+    height: 35vmin;
+    min-height: 33vh;
+    border: 0.75em solid #444;
+    border-radius: 0.75em;
+    align-self: end;
+    justify-self: center;
+    display: grid;
+    transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg);
+    grid-template-areas:
+        "power power"
+        "channels channels"
+        "volume nextPrev";
+
+    > div:nth-of-type(1) {
+        grid-area: power;
+
+        /* Power button */
+        input[type="checkbox"] {
+            display: none;
+        }
+
+        label {
+            display: inline-block;
+            width: 3em;
+            height: 3em;
+            border-radius: 50%;
+            background-color: var(--color-power-off);
+            position: relative;
+
+            /* Power icon */
+            i {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                translate: -50% -50%;
+            }
+        }
+
+        input[type="checkbox"]:checked+label {
+            background-color: var(--color-power-on);
+        }
+    }
+
+    /* Channels */
+    > div:nth-of-type(2) {
+        grid-area: channels;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+
+        div {
+            margin: auto;
+
+            /* Channel radio's */
+            input[type="radio"] {
+                display: none;
+            }
+
+            label {
+                display: inline-block;
+                width: 3em;
+                height: 3em;
+                border-radius: 50%;
+                background-color: var(--chanel-inactive);
+                position: relative;
+            }
+
+            input[type="radio"]:checked+label {
+                background-color: var(--channel-active);
+            }
+        }
+    }
+
+    /* Volume */
+    > div:nth-of-type(3) {
+        grid-area: volume;
+    }
+
+    /* Channels */
+    > div:nth-of-type(4) {
+        grid-area: nextPrev;
+    }
+}
+
+main:has(section:nth-of-type(2) div:nth-of-type(1) input:checked) {
+    --screen-color: forestgreen;
+
+    section:nth-of-type(1) {
+        background-color: var(--screen-color);
+    }
+}
