@@ -1,15 +1,25 @@
-:root {
-    --color-power-on: rgba(241, 90, 34, 1);
-    --color-power-off: rgba(255, 148, 112, 1);
+html {
+    --power-off: rgba(255, 148, 112, 1);
+    --power-hover: rgba(241, 90, 34, 1);
+    --power-on: rgb(207, 62, 14);
 
     --screen-color: rgba(0, 0, 0, 1);
 
-    --chanel-active: rgba(0, 0, 0, 1);
-    --chanel-inactive: rgba(1, 1, 1, 1);
+    --channel-inactive: rgba(1, 1, 1, 1);
+    --channel-hover: rgb(167, 30, 30);
+    --channel-active: rgb(255, 0, 0);
+
+    --static: repeating-radial-gradient(circle at 17% 32%, white, black 0.00085px);
+
+    --tv-shadow: 0;
 }
 
 body {
     margin: 0;
+}
+
+* {
+    font-family: "Quicksand", sans-serif;
 }
 
 button {
@@ -34,6 +44,7 @@ section:nth-of-type(1) {
     border-radius: 0.75em;
     align-self: center;
     justify-self: center;
+    box-shadow: var(--tv-shadow);
 }
 
 /* remote */
@@ -45,6 +56,7 @@ section:nth-of-type(2) {
     min-height: 33vh;
     border: 0.75em solid #444;
     border-radius: 0.75em;
+    padding: 0 0 1em 0;
     align-self: end;
     justify-self: center;
     display: grid;
@@ -54,12 +66,19 @@ section:nth-of-type(2) {
         "channels channels"
         "volume nextPrev";
 
-    > div:nth-of-type(1) {
+    >div:nth-of-type(1) {
         grid-area: power;
 
         /* Power button */
         input[type="checkbox"] {
-            display: none;
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+
+            &:focus+label {
+                outline: 1px solid #fff;
+            }
         }
 
         label {
@@ -67,8 +86,9 @@ section:nth-of-type(2) {
             width: 3em;
             height: 3em;
             border-radius: 50%;
-            background-color: var(--color-power-off);
+            background-color: var(--power-off);
             position: relative;
+            cursor: pointer;
 
             /* Power icon */
             i {
@@ -77,15 +97,19 @@ section:nth-of-type(2) {
                 left: 50%;
                 translate: -50% -50%;
             }
+
+            &:hover {
+                background-color: var(--power-hover);
+            }
         }
 
         input[type="checkbox"]:checked+label {
-            background-color: var(--color-power-on);
+            background-color: var(--power-on);
         }
     }
 
     /* Channels */
-    > div:nth-of-type(2) {
+    >div:nth-of-type(2) {
         grid-area: channels;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -96,7 +120,14 @@ section:nth-of-type(2) {
 
             /* Channel radio's */
             input[type="radio"] {
-                display: none;
+                position: absolute;
+                opacity: 0;
+                width: 0;
+                height: 0;
+
+                &:focus+label {
+                    outline: 1px solid #fff;
+                }
             }
 
             label {
@@ -104,31 +135,120 @@ section:nth-of-type(2) {
                 width: 3em;
                 height: 3em;
                 border-radius: 50%;
-                background-color: var(--chanel-inactive);
+                background-color: var(--channel-inactive);
                 position: relative;
+                cursor: pointer;
             }
 
-            input[type="radio"]:checked+label {
-                background-color: var(--channel-active);
+            input[type="radio"] {
+
+                &+label:hover {
+                    background-color: var(--channel-hover);
+                }
+
+                &:checked+label {
+                    background-color: var(--channel-active);
+
+                    span {
+                        font-weight: 700;
+                    }
+                }
+
+                +label span {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    translate: -50% -50%;
+                    color: #fff;
+                }
             }
         }
     }
 
     /* Volume */
-    > div:nth-of-type(3) {
+    >div:nth-of-type(3) {
         grid-area: volume;
     }
 
     /* Channels */
-    > div:nth-of-type(4) {
+    >div:nth-of-type(4) {
         grid-area: nextPrev;
     }
 }
 
-main:has(section:nth-of-type(2) div:nth-of-type(1) input:checked) {
+/* TV */
+main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked) {
     --screen-color: forestgreen;
+    --tv-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 
+    /* Screen when powered on */
     section:nth-of-type(1) {
-        background-color: var(--screen-color);
+        background-image: var(--static);
+        animation: tv-static .5s linear forwards;
+    }
+}
+
+/* 1st channel */
+main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) input[type="radio"]:checked) {
+    --screen-color: crimson;
+}
+
+/* 2nd channel */
+main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(2) input[type="radio"]:checked) {
+    --screen-color: orange;
+}
+
+/* 3rd channel */
+main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(3) input[type="radio"]:checked) {
+    --screen-color: yellow;
+}
+
+/* 4th channel */
+main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(4) input[type="radio"]:checked) {
+    --screen-color: green;
+}
+
+/* 5th channel */
+main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(5) input[type="radio"]:checked) {
+    --screen-color: lightblue;
+}
+
+/* 6th channel */
+main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(6) input[type="radio"]:checked) {
+    --screen-color: blue;
+}
+
+/* 7th channel */
+main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(7) input[type="radio"]:checked) {
+    --screen-color: pink;
+}
+
+/* 8th channel */
+main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(8) input[type="radio"]:checked) {
+    --screen-color: purple;
+}
+
+/* 9th channel */
+main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(9) input[type="radio"]:checked) {
+    --screen-color: red;
+}
+
+/* Animaties */
+
+/* Static tv animation link */
+/* https://forum.freecodecamp.org/t/creating-an-animated-tv-static-effect-using-just-a-gradient/487486 */
+@keyframes tv-static {
+    0% {
+        background-size: 100% 100%;
+    }
+
+    90% {
+        background-size: 200% 200%;
+    }
+
+    100% {
+        background-image: none;
+        background-size: 100% 100%;
+        animation: none;
     }
 }
