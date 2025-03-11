@@ -34,6 +34,13 @@ main {
     perspective: 25em;
     perspective-origin: 50% 50%;
     transform-style: preserve-3d;
+    grid-template-rows: auto 1fr 1fr;
+}
+
+h1 {
+    text-align: center;
+
+    animation: colorSwitch 4s 0s infinite alternate;
 }
 
 /* Screen */
@@ -46,7 +53,6 @@ section:nth-of-type(1) {
     align-self: center;
     justify-self: center;
     box-shadow: var(--tv-shadow);
-
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
@@ -57,12 +63,13 @@ section:nth-of-type(2) {
     background-color: #444;
     border: 0.75em solid #444;
     border-radius: 0.75em;
-    padding: 2em 1em 2em 1em;
-    gap: 1em;
+    gap: 0.5em;
     align-self: center;
     justify-self: center;
     display: grid;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
     transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg);
+    animation: remoteIdle 10s  0s alternate infinite;
     grid-template-areas:
         "power"
         "channels";
@@ -72,8 +79,6 @@ section:nth-of-type(2) {
 
         label {
             position: relative;
-            width: 3em;
-            height: 3em;
             display: inline-block;
 
             /* Power icon */
@@ -112,7 +117,7 @@ section:nth-of-type(2) {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         grid-template-rows: repeat(2, 1fr);
-        gap: 0.5em;
+        gap: 0.25em;
 
         div {
             margin: auto;
@@ -142,11 +147,6 @@ section:nth-of-type(2) {
                     left: 50%;
                     translate: -50% -50%;
                     color: #fff;
-                }
-
-                @media (max-width: 450px) {
-                    width: 4em;
-                    height: 4em;
                 }
             }
 
@@ -253,4 +253,33 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
         background-image: url("images/Dog-driving.gif");
     }
 }
+
+@media (max-width: 567px) {
+    h1 {
+        font-size: 24px;
+    }
+}
+
+/*** Animations ***/
+
+/* Title color switch */
+@keyframes colorSwitch {
+    0%   { color: red; }
+    25%  { color: yellow; }
+    50%  { color: green; }
+    100% { color: blue; }
+  }
+
+  /* Remote hover */
+@keyframes remoteIdle {
+    0%   { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0); }
+    15%  { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0.25em); }
+    30%  { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0.5em); }
+    45% { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0.25em); }
+    60%   { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0); }
+    75%  { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(-0.25em); }
+    90%  { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(-0.5em); }
+    95%  { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(-0.25em); }
+    100%  { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0em); }
+  }
 
