@@ -12,19 +12,29 @@ html {
     --static: repeating-radial-gradient(circle at 17% 32%, white, black 0.00085px);
 
     --tv-shadow: 0;
+    --test: new;
 }
 
 body {
     margin: 0;
     background: #ccc;
+
+}
+
+@container style(--test: new) {
+    h1 {
+        background-color: red;
+    }
+}
+
+@container style(--test: old) {
+    h1 {
+        background-color: blue;
+    }
 }
 
 * {
     font-family: "Quicksand", sans-serif;
-}
-
-button {
-    cursor: pointer;
 }
 
 main {
@@ -39,7 +49,6 @@ main {
 
 h1 {
     text-align: center;
-
     animation: colorSwitch 4s 0s infinite alternate;
 }
 
@@ -56,6 +65,12 @@ section:nth-of-type(1) {
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
+    overflow: hidden;
+
+    div {
+        width: 100%;
+        height: 100%;
+    }
 }
 
 /* remote */
@@ -69,7 +84,7 @@ section:nth-of-type(2) {
     display: grid;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
     transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg);
-    animation: remoteIdle 10s  0s alternate infinite;
+    animation: remoteIdle 10s 0s alternate infinite;
     grid-template-areas:
         "power"
         "channels";
@@ -98,16 +113,42 @@ section:nth-of-type(2) {
         /* Power button */
         input[type="checkbox"] {
             appearance: none;
-            display: inline-block;
-            width: 3em;
-            height: 3em;
-            border-radius: 50%;
-            background-color: var(--power-off);
+            background: hsla(24, 95%, 48%, 0.871);
+            border-radius: 12px;
+            border: none;
+            padding: 0;
             cursor: pointer;
+            outline-offset: 4px;
+
+            &:checked::before {
+                transform: translateY(2px);
+            }
+
+            /* Bron: https://www.joshwcomeau.com/animation/3d-button/ */
+            &::before {
+                content: "";
+                display: block;
+                padding: 12px 42px;
+                border-radius: 12px;
+                font-size: 1.25rem;
+                background: hsl(31, 93%, 42%);
+                color: white;
+                transform: translateY(-6px);
+            }
         }
 
         input[type="checkbox"]:checked {
             background-color: var(--power-on);
+            --test: 2;
+
+            +i {
+                color: #fff;
+                transform: translateY(0);
+            }
+        }
+
+        i {
+            transform: translateY(-6px);
         }
     }
 
@@ -125,13 +166,17 @@ section:nth-of-type(2) {
             /* Channel radio's */
             input[type="radio"] {
                 appearance: none;
-                display: inline-block;
-                width: 3em;
-                height: 3em;
+                background: hsl(0, 0%, 0%);
                 border-radius: 50%;
-                background-color: var(--channel-inactive);
-                position: relative;
+                border: none;
+                padding: 0;
                 cursor: pointer;
+                outline-offset: 4px;
+                position: relative;
+
+                &:checked::before {
+                    transform: translateY(2px);
+                }
 
                 &:hover {
                     background-color: var(--channel-hover);
@@ -139,6 +184,21 @@ section:nth-of-type(2) {
 
                 &:checked {
                     background-color: var(--channel-active);
+
+                    &::after {
+                        transform: translateY(0);
+                    }
+                }
+
+                &::before {
+                    content: "";
+                    display: block;
+                    padding: 12px 42px;
+                    border-radius: 50%;
+                    font-size: 1.25rem;
+                    background: hsl(0, 0%, 44%);
+                    color: white;
+                    transform: translateY(-6px);
                 }
 
                 &::after {
@@ -147,6 +207,7 @@ section:nth-of-type(2) {
                     left: 50%;
                     translate: -50% -50%;
                     color: #fff;
+                    transform: translateY(-6px);
                 }
             }
 
@@ -154,11 +215,6 @@ section:nth-of-type(2) {
                 content: attr(data-number);
             }
         }
-    }
-
-    /* Volume */
-    >div:nth-of-type(3) {
-        grid-area: volume;
     }
 
     /* Channels */
@@ -169,6 +225,7 @@ section:nth-of-type(2) {
 
 /* TV */
 main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked) {
+    --test: old;
     --screen-color: forestgreen;
     --tv-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
@@ -179,6 +236,13 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
 
     section:nth-of-type(1) {
         background-image: url("images/dog-working.gif");
+
+        div {
+            filter: url(#tvNoise);
+            animation: noiseAnimationReset1 0.5s steps(3) forwards, hideSvg 1s forwards;
+            animation-play-state: running;
+            /* Animation runs once, and SVG hides after 1s */
+        }
     }
 }
 
@@ -188,6 +252,13 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
 
     section:nth-of-type(1) {
         background-image: url("images/sword.gif");
+
+        div {
+            filter: url(#tvNoise);
+            animation: noiseAnimationReset2 0.5s steps(3) forwards, hideSvg2 1s forwards;
+            animation-play-state: running;
+            /* Animation runs once, and SVG hides after 1s */
+        }
     }
 }
 
@@ -197,6 +268,13 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
 
     section:nth-of-type(1) {
         background-image: url("images/born-to-be-alive-mastermovies.gif");
+
+        div {
+            filter: url(#tvNoise);
+            animation: noiseAnimationReset3 0.5s steps(3) forwards, hideSvg3 1s forwards;
+            animation-play-state: running;
+            /* Animation runs once, and SVG hides after 1s */
+        }
     }
 }
 
@@ -206,6 +284,13 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
 
     section:nth-of-type(1) {
         background-image: url("images/trash-panda.gif");
+
+        div {
+            filter: url(#tvNoise);
+            animation: noiseAnimationReset4 0.5s steps(3) forwards, hideSvg4 1s forwards;
+            animation-play-state: running;
+            /* Animation runs once, and SVG hides after 1s */
+        }
     }
 }
 
@@ -215,6 +300,13 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
 
     section:nth-of-type(1) {
         background-image: url("images/spongebob-nuke.gif");
+
+        div {
+            filter: url(#tvNoise);
+            animation: noiseAnimationReset5 0.5s steps(3) forwards, hideSvg5 1s forwards;
+            animation-play-state: running;
+            /* Animation runs once, and SVG hides after 1s */
+        }
     }
 }
 
@@ -224,6 +316,13 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
 
     section:nth-of-type(1) {
         background-image: url("images/lebron.gif");
+
+        div {
+            filter: url(#tvNoise);
+            animation: noiseAnimationReset6 0.5s steps(3) forwards, hideSvg6 1s forwards;
+            animation-play-state: running;
+            /* Animation runs once, and SVG hides after 1s */
+        }
     }
 }
 
@@ -233,6 +332,13 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
 
     section:nth-of-type(1) {
         background-image: url("images/cat-rotating.gif");
+
+        div {
+            filter: url(#tvNoise);
+            animation: noiseAnimationReset7 0.5s steps(3) forwards, hideSvg7 1s forwards;
+            animation-play-state: running;
+            /* Animation runs once, and SVG hides after 1s */
+        }
     }
 }
 
@@ -242,6 +348,13 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
 
     section:nth-of-type(1) {
         background-image: url("images/This-Is-Fine.gif");
+
+        div {
+            filter: url(#tvNoise);
+            animation: noiseAnimationReset8 0.5s steps(3) forwards, hideSvg8 1s forwards;
+            animation-play-state: running;
+            /* Animation runs once, and SVG hides after 1s */
+        }
     }
 }
 
@@ -251,6 +364,13 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
 
     section:nth-of-type(1) {
         background-image: url("images/Dog-driving.gif");
+
+        div {
+            filter: url(#tvNoise);
+            animation: noiseAnimationReset9 0.5s steps(3) forwards, hideSvg9 1s forwards;
+            animation-play-state: running;
+            /* Animation runs once, and SVG hides after 1s */
+        }
     }
 }
 
@@ -264,22 +384,276 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
 
 /* Title color switch */
 @keyframes colorSwitch {
-    0%   { color: red; }
-    25%  { color: yellow; }
-    50%  { color: green; }
-    100% { color: blue; }
-  }
+    0% {
+        color: red;
+    }
 
-  /* Remote hover */
+    25% {
+        color: yellow;
+    }
+
+    50% {
+        color: green;
+    }
+
+    100% {
+        color: blue;
+    }
+}
+
+/* Remote hover */
 @keyframes remoteIdle {
-    0%   { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0); }
-    15%  { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0.25em); }
-    30%  { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0.5em); }
-    45% { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0.25em); }
-    60%   { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0); }
-    75%  { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(-0.25em); }
-    90%  { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(-0.5em); }
-    95%  { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(-0.25em); }
-    100%  { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0em); }
-  }
+    0% {
+        transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0);
+    }
 
+    15% {
+        transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0.25em);
+    }
+
+    30% {
+        transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0.5em);
+    }
+
+    45% {
+        transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0.25em);
+    }
+
+    60% {
+        transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0);
+    }
+
+    75% {
+        transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(-0.25em);
+    }
+
+    90% {
+        transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(-0.5em);
+    }
+
+    95% {
+        transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(-0.25em);
+    }
+
+    100% {
+        transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0em);
+    }
+}
+
+@keyframes noiseAnimationReset1 {
+    0% {
+        filter: url(#tvNoise1);
+    }
+
+    50% {
+        filter: url(#tvNoise2);
+    }
+
+    100% {
+        filter: url(#tvNoise1);
+    }
+}
+
+@keyframes noiseAnimationReset2 {
+    0% {
+        filter: url(#tvNoise1);
+    }
+
+    50% {
+        filter: url(#tvNoise2);
+    }
+
+    100% {
+        filter: url(#tvNoise1);
+    }
+}
+
+@keyframes noiseAnimationReset3 {
+    0% {
+        filter: url(#tvNoise1);
+    }
+
+    50% {
+        filter: url(#tvNoise2);
+    }
+
+    100% {
+        filter: url(#tvNoise1);
+    }
+}
+
+@keyframes noiseAnimationReset4 {
+    0% {
+        filter: url(#tvNoise1);
+    }
+
+    50% {
+        filter: url(#tvNoise2);
+    }
+
+    100% {
+        filter: url(#tvNoise1);
+    }
+}
+
+@keyframes noiseAnimationReset5 {
+    0% {
+        filter: url(#tvNoise1);
+    }
+
+    50% {
+        filter: url(#tvNoise2);
+    }
+
+    100% {
+        filter: url(#tvNoise1);
+    }
+}
+
+@keyframes noiseAnimationReset6 {
+    0% {
+        filter: url(#tvNoise1);
+    }
+
+    50% {
+        filter: url(#tvNoise2);
+    }
+
+    100% {
+        filter: url(#tvNoise1);
+    }
+}
+
+@keyframes noiseAnimationReset7 {
+    0% {
+        filter: url(#tvNoise1);
+    }
+
+    50% {
+        filter: url(#tvNoise2);
+    }
+
+    100% {
+        filter: url(#tvNoise1);
+    }
+}
+
+@keyframes noiseAnimationReset8 {
+    0% {
+        filter: url(#tvNoise1);
+    }
+
+    50% {
+        filter: url(#tvNoise2);
+    }
+
+    100% {
+        filter: url(#tvNoise1);
+    }
+}
+
+@keyframes noiseAnimationReset9 {
+    0% {
+        filter: url(#tvNoise1);
+    }
+
+    50% {
+        filter: url(#tvNoise2);
+    }
+
+    100% {
+        filter: url(#tvNoise1);
+    }
+}
+
+@keyframes hideSvg {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes hideSvg2 {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes hideSvg3 {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes hideSvg4 {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes hideSvg5 {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes hideSvg6 {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes hideSvg7 {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes hideSvg8 {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes hideSvg9 {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/***************/

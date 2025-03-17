@@ -24,7 +24,9 @@
         <h1>Tymo's TV</h1>
 
         <!-- TV -->
-        <section name="tv"></section>
+        <section name="tv">
+            <div name="screen"></div>
+        </section>
 
         <!-- Remote -->
         <section name="remote">
@@ -68,6 +70,20 @@
                 </div>
             </div>
         </section>
+
+        <svg width="0" height="0">
+            <defs>
+                <!-- First TV Static Pattern -->
+                <filter id="tvNoise1">
+                    <feTurbulence type="turbulence" baseFrequency="0.8" numOctaves="4" seed="1"/>
+                </filter>
+    
+                <!-- Second TV Static Pattern -->
+                <filter id="tvNoise2">
+                    <feTurbulence type="turbulence" baseFrequency="1.2" numOctaves="4" seed="2"/>
+                </filter>
+            </defs>
+        </svg>
     </main>
 </body>
 
