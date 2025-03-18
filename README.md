@@ -119,6 +119,39 @@ In de css heb ik een aantal overbodige lijnen kunnen wegwerken door data attribu
             }
 ```
 
+### Week 4
+
+De radiobuttons zijn 3D gemaakt door een ::before toe te voegen aan de radiobuttons en de checkbox zodat er diepte ontstaat. De knoppen hebben ook een transition zodat de knoppen een animatie hebben.
+
+Het scherm heeft nu een svg filter zodat er een transitie is tussen de verschillende kanalen. Er is ook een channel nummer toegevoegd aan het scherm zodat je weet welk kanaal actief is.
+
+De channel nummer is via een @container query gemaakt die test welk kanaal actief is en daarvan het nummer teruggeeft.
+
+```css
+@container not style(--active-channel: 0) {
+    main > section:nth-of-type(1)::after { 
+        counter-reset: channel var(--active-channel);
+        content: counter(channel);
+        display: flex; 
+    }
+}
+```
+
+De static werkt doormiddel van 2 svg fiters die achter elkaar snel wisselen zodat er een static effect komt. Ook work er een animatie afgespeeld die de opacity van de svg filter op 0 zet zodat deze niet meer zichtbaar zijn.
+
+```css
+@keyframes noiseAnimationReset1 {
+    0% { filter: url(#tvNoise1); }
+    50% { filter: url(#tvNoise2); }
+    100% { filter: url(#tvNoise1); }
+}
+
+@keyframes hideSvg {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+```
+
 Via [Giphy](https://giphy.com/) heb ik de gifjes kunnen zoeken en overnemen voor dit project.
 
 ## Link

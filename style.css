@@ -1,3 +1,4 @@
+/* Variables */
 html {
     --power-off: rgba(255, 148, 112, 1);
     --power-hover: rgba(241, 90, 34, 1);
@@ -12,30 +13,23 @@ html {
     --static: repeating-radial-gradient(circle at 17% 32%, white, black 0.00085px);
 
     --tv-shadow: 0;
-    --test: new;
+    --active-channel: 0;
 }
 
 body {
     margin: 0;
     background: #ccc;
-
 }
 
-@container style(--test: new) {
-    h1 {
-        background-color: red;
+@container not style(--active-channel: 0) {
+    main > section:nth-of-type(1)::after { 
+        counter-reset: channel var(--active-channel);
+        content: counter(channel);
+        display: flex; 
     }
 }
 
-@container style(--test: old) {
-    h1 {
-        background-color: blue;
-    }
-}
-
-* {
-    font-family: "Quicksand", sans-serif;
-}
+* { font-family: "Quicksand", sans-serif; }
 
 main {
     height: 100vh;
@@ -52,7 +46,7 @@ h1 {
     animation: colorSwitch 4s 0s infinite alternate;
 }
 
-/* Screen */
+/* TV */
 section:nth-of-type(1) {
     background-color: var(--screen-color);
     width: 66%;
@@ -66,10 +60,31 @@ section:nth-of-type(1) {
     background-position: center;
     background-repeat: no-repeat;
     overflow: hidden;
+    position: relative;
 
-    div {
+    /* Screen */
+    div:nth-of-type(1) {
         width: 100%;
         height: 100%;
+    }
+
+    /* Channel number */
+    &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 24px;
+        font-weight: 700;
+        color: #ccc;
+        background-color: rgba(75, 75, 75, 0.5);
+        width: 3em;
+        height: 3em;
+        max-width: 50%;
+        max-height: 25%;
+        display: none;
+        align-items: center;
+        justify-content: center;
     }
 }
 
@@ -105,9 +120,7 @@ section:nth-of-type(2) {
                 cursor: pointer;
             }
 
-            &:hover input[type="checkbox"] {
-                background-color: var(--power-hover);
-            }
+            &:hover input[type="checkbox"] { background-color: var(--power-hover); }
         }
 
         /* Power button */
@@ -119,10 +132,9 @@ section:nth-of-type(2) {
             padding: 0;
             cursor: pointer;
             outline-offset: 4px;
+            transition: 0.5s all ease-out;
 
-            &:checked::before {
-                transform: translateY(2px);
-            }
+            &:checked::before { transform: translateY(2px); }
 
             /* Bron: https://www.joshwcomeau.com/animation/3d-button/ */
             &::before {
@@ -134,12 +146,12 @@ section:nth-of-type(2) {
                 background: hsl(31, 93%, 42%);
                 color: white;
                 transform: translateY(-6px);
+                transition: 0.5s all ease-out;
             }
         }
 
         input[type="checkbox"]:checked {
             background-color: var(--power-on);
-            --test: 2;
 
             +i {
                 color: #fff;
@@ -149,11 +161,12 @@ section:nth-of-type(2) {
 
         i {
             transform: translateY(-6px);
+            transition: 0.5s all ease-out;
         }
     }
 
     /* Channels */
-    >div:nth-of-type(2) {
+    > div:nth-of-type(2) {
         grid-area: channels;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -174,31 +187,24 @@ section:nth-of-type(2) {
                 outline-offset: 4px;
                 position: relative;
 
-                &:checked::before {
-                    transform: translateY(2px);
-                }
-
-                &:hover {
-                    background-color: var(--channel-hover);
-                }
-
+                &:checked::before { transform: translateY(2px); }
+                &:hover { background-color: var(--channel-hover); }
                 &:checked {
                     background-color: var(--channel-active);
 
-                    &::after {
-                        transform: translateY(0);
-                    }
+                    &::after { transform: translateY(0); }
                 }
 
                 &::before {
                     content: "";
                     display: block;
-                    padding: 12px 42px;
+                    padding: 1em 2em;
                     border-radius: 50%;
                     font-size: 1.25rem;
                     background: hsl(0, 0%, 44%);
                     color: white;
                     transform: translateY(-6px);
+                    transition: 0.5s all ease-out;
                 }
 
                 &::after {
@@ -208,24 +214,21 @@ section:nth-of-type(2) {
                     translate: -50% -50%;
                     color: #fff;
                     transform: translateY(-6px);
+                    transition: 0.5s all ease-out;
                 }
             }
 
-            input::after {
-                content: attr(data-number);
-            }
+            /* Channel number */
+            input::after { content: attr(data-number); }
         }
     }
 
     /* Channels */
-    >div:nth-of-type(4) {
-        grid-area: nextPrev;
-    }
+    > div:nth-of-type(4) { grid-area: nextPrev; }
 }
 
 /* TV */
 main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked) {
-    --test: old;
     --screen-color: forestgreen;
     --tv-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
@@ -233,15 +236,15 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
 /* 1st channel */
 main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) input[type="radio"]:checked) {
     --screen-color: #000;
+    --active-channel: 1;
 
     section:nth-of-type(1) {
         background-image: url("images/dog-working.gif");
 
-        div {
+        div:nth-of-type(1) {
             filter: url(#tvNoise);
             animation: noiseAnimationReset1 0.5s steps(3) forwards, hideSvg 1s forwards;
             animation-play-state: running;
-            /* Animation runs once, and SVG hides after 1s */
         }
     }
 }
@@ -249,15 +252,15 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
 /* 2nd channel */
 main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(2) input[type="radio"]:checked) {
     --screen-color: #000;
+    --active-channel: 2;
 
     section:nth-of-type(1) {
         background-image: url("images/sword.gif");
 
-        div {
+        div:nth-of-type(1) {
             filter: url(#tvNoise);
             animation: noiseAnimationReset2 0.5s steps(3) forwards, hideSvg2 1s forwards;
             animation-play-state: running;
-            /* Animation runs once, and SVG hides after 1s */
         }
     }
 }
@@ -265,15 +268,15 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
 /* 3rd channel */
 main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(3) input[type="radio"]:checked) {
     --screen-color: #000;
+    --active-channel: 3;
 
     section:nth-of-type(1) {
         background-image: url("images/born-to-be-alive-mastermovies.gif");
 
-        div {
+        div:nth-of-type(1) {
             filter: url(#tvNoise);
             animation: noiseAnimationReset3 0.5s steps(3) forwards, hideSvg3 1s forwards;
             animation-play-state: running;
-            /* Animation runs once, and SVG hides after 1s */
         }
     }
 }
@@ -281,15 +284,15 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
 /* 4th channel */
 main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(4) input[type="radio"]:checked) {
     --screen-color: #000;
+    --active-channel: 4;
 
     section:nth-of-type(1) {
         background-image: url("images/trash-panda.gif");
 
-        div {
+        div:nth-of-type(1) {
             filter: url(#tvNoise);
             animation: noiseAnimationReset4 0.5s steps(3) forwards, hideSvg4 1s forwards;
             animation-play-state: running;
-            /* Animation runs once, and SVG hides after 1s */
         }
     }
 }
@@ -297,15 +300,15 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
 /* 5th channel */
 main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(5) input[type="radio"]:checked) {
     --screen-color: #000;
+    --active-channel: 5;
 
     section:nth-of-type(1) {
         background-image: url("images/spongebob-nuke.gif");
 
-        div {
+        div:nth-of-type(1) {
             filter: url(#tvNoise);
             animation: noiseAnimationReset5 0.5s steps(3) forwards, hideSvg5 1s forwards;
             animation-play-state: running;
-            /* Animation runs once, and SVG hides after 1s */
         }
     }
 }
@@ -313,15 +316,15 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
 /* 6th channel */
 main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(6) input[type="radio"]:checked) {
     --screen-color: #000;
+    --active-channel: 6;
 
     section:nth-of-type(1) {
         background-image: url("images/lebron.gif");
 
-        div {
+        div:nth-of-type(1) {
             filter: url(#tvNoise);
             animation: noiseAnimationReset6 0.5s steps(3) forwards, hideSvg6 1s forwards;
             animation-play-state: running;
-            /* Animation runs once, and SVG hides after 1s */
         }
     }
 }
@@ -329,15 +332,15 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
 /* 7th channel */
 main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(7) input[type="radio"]:checked) {
     --screen-color: #00ff01;
+    --active-channel: 7;
 
     section:nth-of-type(1) {
         background-image: url("images/cat-rotating.gif");
 
-        div {
+        div:nth-of-type(1) {
             filter: url(#tvNoise);
             animation: noiseAnimationReset7 0.5s steps(3) forwards, hideSvg7 1s forwards;
             animation-play-state: running;
-            /* Animation runs once, and SVG hides after 1s */
         }
     }
 }
@@ -345,15 +348,15 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
 /* 8th channel */
 main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(8) input[type="radio"]:checked) {
     --screen-color: #000;
+    --active-channel: 8;
 
     section:nth-of-type(1) {
         background-image: url("images/This-Is-Fine.gif");
 
-        div {
+        div:nth-of-type(1) {
             filter: url(#tvNoise);
             animation: noiseAnimationReset8 0.5s steps(3) forwards, hideSvg8 1s forwards;
             animation-play-state: running;
-            /* Animation runs once, and SVG hides after 1s */
         }
     }
 }
@@ -361,22 +364,16 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
 /* 9th channel */
 main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(9) input[type="radio"]:checked) {
     --screen-color: #000;
+    --active-channel: 9;
 
     section:nth-of-type(1) {
         background-image: url("images/Dog-driving.gif");
 
-        div {
+        div:nth-of-type(1) {
             filter: url(#tvNoise);
             animation: noiseAnimationReset9 0.5s steps(3) forwards, hideSvg9 1s forwards;
             animation-play-state: running;
-            /* Animation runs once, and SVG hides after 1s */
         }
-    }
-}
-
-@media (max-width: 567px) {
-    h1 {
-        font-size: 24px;
     }
 }
 
@@ -384,276 +381,121 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
 
 /* Title color switch */
 @keyframes colorSwitch {
-    0% {
-        color: red;
-    }
-
-    25% {
-        color: yellow;
-    }
-
-    50% {
-        color: green;
-    }
-
-    100% {
-        color: blue;
-    }
+    0% { color: red; }
+    25% { color: yellow; }
+    50% { color: green; }
+    100% { color: blue; }
 }
 
 /* Remote hover */
 @keyframes remoteIdle {
-    0% {
-        transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0);
-    }
-
-    15% {
-        transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0.25em);
-    }
-
-    30% {
-        transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0.5em);
-    }
-
-    45% {
-        transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0.25em);
-    }
-
-    60% {
-        transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0);
-    }
-
-    75% {
-        transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(-0.25em);
-    }
-
-    90% {
-        transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(-0.5em);
-    }
-
-    95% {
-        transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(-0.25em);
-    }
-
-    100% {
-        transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0em);
-    }
+    0% { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0); }
+    15% { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0.25em); }
+    30% { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0.5em); }
+    45% { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0.25em); }
+    60% { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0); }
+    75% { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(-0.25em); }
+    90% { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(-0.5em); }
+    95% { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(-0.25em); }
+    100% { transform: rotateX(45deg) rotateY(0deg) rotateZ(0deg) translateX(0em); }
 }
 
 @keyframes noiseAnimationReset1 {
-    0% {
-        filter: url(#tvNoise1);
-    }
-
-    50% {
-        filter: url(#tvNoise2);
-    }
-
-    100% {
-        filter: url(#tvNoise1);
-    }
+    0% { filter: url(#tvNoise1); }
+    50% { filter: url(#tvNoise2); }
+    100% { filter: url(#tvNoise1); }
 }
 
 @keyframes noiseAnimationReset2 {
-    0% {
-        filter: url(#tvNoise1);
-    }
-
-    50% {
-        filter: url(#tvNoise2);
-    }
-
-    100% {
-        filter: url(#tvNoise1);
-    }
+    0% { filter: url(#tvNoise1); }
+    50% { filter: url(#tvNoise2); }
+    100% { filter: url(#tvNoise1); }
 }
 
 @keyframes noiseAnimationReset3 {
-    0% {
-        filter: url(#tvNoise1);
-    }
-
-    50% {
-        filter: url(#tvNoise2);
-    }
-
-    100% {
-        filter: url(#tvNoise1);
-    }
+    0% { filter: url(#tvNoise1); }
+    50% { filter: url(#tvNoise2); }
+    100% { filter: url(#tvNoise1); }
 }
 
 @keyframes noiseAnimationReset4 {
-    0% {
-        filter: url(#tvNoise1);
-    }
-
-    50% {
-        filter: url(#tvNoise2);
-    }
-
-    100% {
-        filter: url(#tvNoise1);
-    }
+    0% { filter: url(#tvNoise1); }
+    50% { filter: url(#tvNoise2); }
+    100% { filter: url(#tvNoise1); }
 }
 
 @keyframes noiseAnimationReset5 {
-    0% {
-        filter: url(#tvNoise1);
-    }
-
-    50% {
-        filter: url(#tvNoise2);
-    }
-
-    100% {
-        filter: url(#tvNoise1);
-    }
+    0% { filter: url(#tvNoise1); }
+    50% { filter: url(#tvNoise2); }
+    100% { filter: url(#tvNoise1); }
 }
 
 @keyframes noiseAnimationReset6 {
-    0% {
-        filter: url(#tvNoise1);
-    }
-
-    50% {
-        filter: url(#tvNoise2);
-    }
-
-    100% {
-        filter: url(#tvNoise1);
-    }
+    0% { filter: url(#tvNoise1); }
+    50% { filter: url(#tvNoise2); }
+    100% { filter: url(#tvNoise1); }
 }
 
 @keyframes noiseAnimationReset7 {
-    0% {
-        filter: url(#tvNoise1);
-    }
-
-    50% {
-        filter: url(#tvNoise2);
-    }
-
-    100% {
-        filter: url(#tvNoise1);
-    }
+    0% { filter: url(#tvNoise1); }
+    50% { filter: url(#tvNoise2); }
+    100% { filter: url(#tvNoise1); }
 }
 
 @keyframes noiseAnimationReset8 {
-    0% {
-        filter: url(#tvNoise1);
-    }
-
-    50% {
-        filter: url(#tvNoise2);
-    }
-
-    100% {
-        filter: url(#tvNoise1);
-    }
+    0% { filter: url(#tvNoise1); }
+    50% { filter: url(#tvNoise2); }
+    100% { filter: url(#tvNoise1); }
 }
 
 @keyframes noiseAnimationReset9 {
-    0% {
-        filter: url(#tvNoise1);
-    }
-
-    50% {
-        filter: url(#tvNoise2);
-    }
-
-    100% {
-        filter: url(#tvNoise1);
-    }
+    0% { filter: url(#tvNoise1); }
+    50% { filter: url(#tvNoise2); }
+    100% { filter: url(#tvNoise1); }
 }
 
 @keyframes hideSvg {
-    0% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
+    0% { opacity: 1; }
+    100% { opacity: 0; }
 }
 
 @keyframes hideSvg2 {
-    0% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
+    0% { opacity: 1; }
+    100% { opacity: 0; }
 }
 
 @keyframes hideSvg3 {
-    0% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
+    0% { opacity: 1; }
+    100% { opacity: 0; }
 }
 
 @keyframes hideSvg4 {
-    0% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
+    0% { opacity: 1; }
+    100% { opacity: 0; }
 }
 
 @keyframes hideSvg5 {
-    0% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
+    0% { opacity: 1; }
+    100% { opacity: 0; }
 }
 
 @keyframes hideSvg6 {
-    0% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
+    0% { opacity: 1; }
+    100% { opacity: 0; }
 }
 
 @keyframes hideSvg7 {
-    0% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
+    0% { opacity: 1; }
+    100% { opacity: 0; }
 }
 
 @keyframes hideSvg8 {
-    0% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
+    0% { opacity: 1; }
+    100% { opacity: 0; }
 }
 
 @keyframes hideSvg9 {
-    0% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
+    0% { opacity: 1; }
+    100% { opacity: 0; }
 }
-
 /***************/
