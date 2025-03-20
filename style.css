@@ -219,7 +219,8 @@ section:nth-of-type(2) {
             }
 
             /* Channel number */
-            input::after { content: attr(data-number); }
+            /* Na feedback veranderd naar value ipv data attribute */
+            input::after { content: attr(value); }
         }
     }
 
@@ -228,109 +229,103 @@ section:nth-of-type(2) {
 }
 
 /* TV */
-main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked) {
+main:has(input[type="checkbox"]:checked) {
     --screen-color: forestgreen;
     --tv-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
-/* 1st channel */
-main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) input[type="radio"]:checked) {
+/* Any channel */
+main:has(input[type="checkbox"]:checked):has(input[value]:checked) {
     --screen-color: #000;
+
+    section:nth-of-type(1) {
+        div:nth-of-type(1) {
+            filter: url(#tvNoise);
+            animation-play-state: running;
+        }
+    }
+}
+
+/* 1st channel */
+main:has(input[type="checkbox"]:checked):has(input[value="1"]:checked) {
     --active-channel: 1;
 
     section:nth-of-type(1) {
         background-image: url("images/dog-working.gif");
 
         div:nth-of-type(1) {
-            filter: url(#tvNoise);
             animation: noiseAnimationReset1 0.5s steps(3) forwards, hideSvg 1s forwards;
-            animation-play-state: running;
         }
     }
 }
 
 /* 2nd channel */
-main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(2) input[type="radio"]:checked) {
-    --screen-color: #000;
+main:has(input[type="checkbox"]:checked):has(input[value="2"]:checked) {
     --active-channel: 2;
 
     section:nth-of-type(1) {
         background-image: url("images/sword.gif");
 
         div:nth-of-type(1) {
-            filter: url(#tvNoise);
             animation: noiseAnimationReset2 0.5s steps(3) forwards, hideSvg2 1s forwards;
-            animation-play-state: running;
         }
     }
 }
 
 /* 3rd channel */
-main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(3) input[type="radio"]:checked) {
-    --screen-color: #000;
+main:has(input[type="checkbox"]:checked):has(input[value="3"]:checked) {
     --active-channel: 3;
 
     section:nth-of-type(1) {
         background-image: url("images/born-to-be-alive-mastermovies.gif");
 
         div:nth-of-type(1) {
-            filter: url(#tvNoise);
             animation: noiseAnimationReset3 0.5s steps(3) forwards, hideSvg3 1s forwards;
-            animation-play-state: running;
         }
     }
 }
 
 /* 4th channel */
-main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(4) input[type="radio"]:checked) {
-    --screen-color: #000;
+main:has(input[type="checkbox"]:checked):has(input[value="4"]:checked) {
     --active-channel: 4;
 
     section:nth-of-type(1) {
         background-image: url("images/trash-panda.gif");
 
         div:nth-of-type(1) {
-            filter: url(#tvNoise);
             animation: noiseAnimationReset4 0.5s steps(3) forwards, hideSvg4 1s forwards;
-            animation-play-state: running;
         }
     }
 }
 
 /* 5th channel */
-main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(5) input[type="radio"]:checked) {
-    --screen-color: #000;
+main:has(input[type="checkbox"]:checked):has(input[value="5"]:checked) {
     --active-channel: 5;
 
     section:nth-of-type(1) {
         background-image: url("images/spongebob-nuke.gif");
 
         div:nth-of-type(1) {
-            filter: url(#tvNoise);
             animation: noiseAnimationReset5 0.5s steps(3) forwards, hideSvg5 1s forwards;
-            animation-play-state: running;
         }
     }
 }
 
 /* 6th channel */
-main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(6) input[type="radio"]:checked) {
-    --screen-color: #000;
+main:has(input[type="checkbox"]:checked):has(input[value="6"]:checked) {
     --active-channel: 6;
 
     section:nth-of-type(1) {
         background-image: url("images/lebron.gif");
 
         div:nth-of-type(1) {
-            filter: url(#tvNoise);
             animation: noiseAnimationReset6 0.5s steps(3) forwards, hideSvg6 1s forwards;
-            animation-play-state: running;
         }
     }
 }
 
 /* 7th channel */
-main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(7) input[type="radio"]:checked) {
+main:has(input[type="checkbox"]:checked):has(input[value="7"]:checked) {
     --screen-color: #00ff01;
     --active-channel: 7;
 
@@ -338,41 +333,33 @@ main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checke
         background-image: url("images/cat-rotating.gif");
 
         div:nth-of-type(1) {
-            filter: url(#tvNoise);
             animation: noiseAnimationReset7 0.5s steps(3) forwards, hideSvg7 1s forwards;
-            animation-play-state: running;
         }
     }
 }
 
 /* 8th channel */
-main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(8) input[type="radio"]:checked) {
-    --screen-color: #000;
+main:has(input[type="checkbox"]:checked):has(input[value="8"]:checked) {
     --active-channel: 8;
 
     section:nth-of-type(1) {
         background-image: url("images/This-Is-Fine.gif");
 
         div:nth-of-type(1) {
-            filter: url(#tvNoise);
             animation: noiseAnimationReset8 0.5s steps(3) forwards, hideSvg8 1s forwards;
-            animation-play-state: running;
         }
     }
 }
 
 /* 9th channel */
-main:has(section:nth-of-type(2) div:nth-of-type(1) input[type="checkbox"]:checked):has(section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(9) input[type="radio"]:checked) {
-    --screen-color: #000;
+main:has(input[type="checkbox"]:checked):has(input[value="9"]:checked) {
     --active-channel: 9;
 
     section:nth-of-type(1) {
         background-image: url("images/Dog-driving.gif");
 
         div:nth-of-type(1) {
-            filter: url(#tvNoise);
             animation: noiseAnimationReset9 0.5s steps(3) forwards, hideSvg9 1s forwards;
-            animation-play-state: running;
         }
     }
 }
