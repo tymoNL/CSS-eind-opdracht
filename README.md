@@ -153,6 +153,10 @@ Het scherm heeft nu een svg filter zodat er een transitie is tussen de verschill
 
 De channel nummer is via een @container query gemaakt die test welk kanaal actief is en daarvan het nummer teruggeeft.
 
+Je kan met container queries test op waardes van variabelen en daarmee styling aanpassen.
+Hier worde het kanaalnummer aangepast op de waarde van de active channel. Dit gebeurd als de active channel niet 0 is.
+Dit is gedaan zodat alle channels een container query kunnen gebruiken en niet elke channel een losse query nodig heeft.
+
 ```css
 @container not style(--active-channel: 0) {
     main > section:nth-of-type(1)::after { 
