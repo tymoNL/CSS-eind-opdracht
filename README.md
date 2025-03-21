@@ -167,6 +167,8 @@ Dit is gedaan zodat alle channels een container query kunnen gebruiken en niet e
 }
 ```
 
+#### Kanaal wissel animatie
+
 De static werkt doormiddel van 2 svg fiters die achter elkaar snel wisselen zodat er een static effect komt. Ook work er een animatie afgespeeld die de opacity van de svg filter op 0 zet zodat deze niet meer zichtbaar zijn.
 
 ```css
